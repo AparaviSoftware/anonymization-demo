@@ -1,0 +1,187 @@
+{
+  "source": "webhook_1",
+  "components": [
+    {
+      "id": "webhook_1",
+      "provider": "webhook",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "type": "webhook"
+      },
+      "ui": {
+        "position": {
+          "x": 80,
+          "y": 220
+        },
+        "measured": {
+          "width": 140,
+          "height": 123
+        },
+        "data": {
+          "class": "source",
+          "type": "default"
+        },
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "preprocessor_langchain_1",
+      "provider": "preprocessor_langchain",
+      "config": {
+        "profile": "default",
+        "default": {
+          "mode": "strlen",
+          "splitter": "RecursiveCharacterTextSplitter",
+          "strlen": 512
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 400,
+          "y": 240
+        },
+        "measured": {
+          "width": 140,
+          "height": 106
+        },
+        "data": {
+          "class": "preprocessor",
+          "type": "default"
+        },
+        "formDataValid": false,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__parse_1source-text-0-preprocessor_langchain_1target-text-1",
+            "source": "parse_1",
+            "target": "preprocessor_langchain_1",
+            "sourceHandle": "source-text-0",
+            "targetHandle": "target-text-1"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "text",
+          "from": "parse_1"
+        }
+      ]
+    },
+    {
+      "id": "parse_1",
+      "provider": "parse",
+      "config": {},
+      "ui": {
+        "position": {
+          "x": 240,
+          "y": 220
+        },
+        "measured": {
+          "width": 140,
+          "height": 123
+        },
+        "data": {
+          "class": "data",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__webhook_1source-tags-0-parse_1target-tags-0",
+            "source": "webhook_1",
+            "target": "parse_1",
+            "sourceHandle": "source-tags-0",
+            "targetHandle": "target-tags-0"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "tags",
+          "from": "webhook_1"
+        }
+      ]
+    },
+    {
+      "id": "embedding_transformer_1",
+      "provider": "embedding_transformer",
+      "config": {
+        "profile": "miniLM"
+      },
+      "ui": {
+        "position": {
+          "x": 560,
+          "y": 260
+        },
+        "measured": {
+          "width": 140,
+          "height": 90
+        },
+        "data": {
+          "class": "embedding",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__preprocessor_langchain_1source-documents-1-embedding_transformer_1target-documents-0",
+            "source": "preprocessor_langchain_1",
+            "target": "embedding_transformer_1",
+            "sourceHandle": "source-documents-1",
+            "targetHandle": "target-documents-0"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "documents",
+          "from": "preprocessor_langchain_1"
+        }
+      ]
+    },
+    {
+      "id": "response_1",
+      "provider": "response",
+      "config": {
+        "lanes": []
+      },
+      "ui": {
+        "position": {
+          "x": 720,
+          "y": 200
+        },
+        "measured": {
+          "width": 140,
+          "height": 264
+        },
+        "data": {
+          "class": "infrastructure",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "source": "embedding_transformer_1",
+            "sourceHandle": "source-documents-0",
+            "target": "response_1",
+            "targetHandle": "target-documents-2",
+            "id": "xy-edge__embedding_transformer_1source-documents-0-response_1target-documents-2"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "documents",
+          "from": "embedding_transformer_1"
+        }
+      ]
+    }
+  ],
+  "id": "4bb73336-994a-4fc0-a68a-a042fff738c9"
+}

@@ -1,0 +1,281 @@
+{
+  "source": "webhook_1",
+  "components": [
+    {
+      "id": "frame_grabber_1",
+      "provider": "frame_grabber",
+      "config": {
+        "profile": "key",
+        "key": {
+          "duration": 0,
+          "max_frames": 0,
+          "start_time": 0
+        },
+        "interval": {
+          "duration": 0,
+          "interval": 5,
+          "start_time": 0
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 1020,
+          "y": 560
+        },
+        "measured": {
+          "width": 180,
+          "height": 98
+        },
+        "data": {
+          "class": "video",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__webhook_1source-video-0-frame_grabber_1target-video-0",
+            "source": "webhook_1",
+            "target": "frame_grabber_1",
+            "sourceHandle": "source-video-0",
+            "targetHandle": "target-video-0"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "video",
+          "from": "webhook_1"
+        }
+      ]
+    },
+    {
+      "id": "audio_transcribe_1",
+      "provider": "audio_transcribe",
+      "config": {
+        "profile": "default",
+        "default": {
+          "max_seconds": 300,
+          "min_seconds": 240,
+          "model": "small",
+          "silence_threshold": 0.5,
+          "vad_level": 2
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 1220,
+          "y": 340
+        },
+        "measured": {
+          "width": 180,
+          "height": 115
+        },
+        "data": {
+          "class": "audio",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__webhook_1source-video-0-audio_transcribe_1target-video-1",
+            "source": "webhook_1",
+            "target": "audio_transcribe_1",
+            "sourceHandle": "source-video-0",
+            "targetHandle": "target-video-1"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "video",
+          "from": "webhook_1"
+        }
+      ]
+    },
+    {
+      "id": "llm_vision_mistral_1",
+      "provider": "llm_vision_mistral",
+      "config": {
+        "profile": "pixtral-12b",
+        "pixtral-12b": {
+          "apikey": "sNfKkXZA49QJgJmB6aXmQoG3fJpkokhM",
+          "prompt": "Extract the text from this image",
+          "systemPrompt": "You are an OCR specialist. Extract all text from images accurately."
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 1260,
+          "y": 540
+        },
+        "measured": {
+          "width": 180,
+          "height": 99
+        },
+        "data": {
+          "class": "llm",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__frame_grabber_1source-image-0-llm_vision_mistral_1target-image-0",
+            "source": "frame_grabber_1",
+            "target": "llm_vision_mistral_1",
+            "sourceHandle": "source-image-0",
+            "targetHandle": "target-image-0"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "image",
+          "from": "frame_grabber_1"
+        }
+      ]
+    },
+    {
+      "id": "ocr_1",
+      "provider": "ocr",
+      "config": {
+        "profile": "default",
+        "default": {
+          "language": "en",
+          "table": "Doctr",
+          "doctr": {
+            "det_arch": "db_resnet50",
+            "reco_arch": "crnn_vgg16_bn"
+          }
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 1260,
+          "y": 660
+        },
+        "measured": {
+          "width": 180,
+          "height": 135
+        },
+        "data": {
+          "class": "image",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__frame_grabber_1source-image-0-ocr_1target-image-1",
+            "source": "frame_grabber_1",
+            "target": "ocr_1",
+            "sourceHandle": "source-image-0",
+            "targetHandle": "target-image-1"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "image",
+          "from": "frame_grabber_1"
+        }
+      ]
+    },
+    {
+      "id": "response_1",
+      "provider": "response",
+      "config": {
+        "lanes": []
+      },
+      "ui": {
+        "position": {
+          "x": 1560,
+          "y": 380
+        },
+        "measured": {
+          "width": 180,
+          "height": 337
+        },
+        "data": {
+          "class": "infrastructure",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__llm_vision_mistral_1source-text-0-response_1target-text-6",
+            "source": "llm_vision_mistral_1",
+            "target": "response_1",
+            "sourceHandle": "source-text-0",
+            "targetHandle": "target-text-6"
+          },
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__audio_transcribe_1source-text-1-response_1target-text-6",
+            "source": "audio_transcribe_1",
+            "target": "response_1",
+            "sourceHandle": "source-text-1",
+            "targetHandle": "target-text-6"
+          },
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__ocr_1source-text-1-response_1target-text-6",
+            "source": "ocr_1",
+            "target": "response_1",
+            "sourceHandle": "source-text-1",
+            "targetHandle": "target-text-6"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "text",
+          "from": "llm_vision_mistral_1"
+        },
+        {
+          "lane": "text",
+          "from": "audio_transcribe_1"
+        },
+        {
+          "lane": "text",
+          "from": "ocr_1"
+        }
+      ]
+    },
+    {
+      "id": "webhook_1",
+      "provider": "webhook",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "type": "webhook"
+      },
+      "ui": {
+        "position": {
+          "x": 740,
+          "y": 420
+        },
+        "measured": {
+          "width": 180,
+          "height": 157
+        },
+        "data": {
+          "class": "source",
+          "type": "default"
+        },
+        "formDataValid": true
+      }
+    }
+  ],
+  "id": "aa32b099-5137-4095-ad22-79dc08d9c8c0"
+}

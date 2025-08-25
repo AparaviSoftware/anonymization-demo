@@ -1,0 +1,106 @@
+{
+  "source": "webhook_1",
+  "components": [
+    {
+      "id": "webhook_1",
+      "provider": "webhook",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "type": "webhook"
+      },
+      "ui": {
+        "position": {
+          "x": 80,
+          "y": 240
+        },
+        "measured": {
+          "width": 140,
+          "height": 123
+        },
+        "data": {
+          "class": "source",
+          "type": "default"
+        },
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "parse_1",
+      "provider": "parse",
+      "config": {},
+      "ui": {
+        "position": {
+          "x": 260,
+          "y": 240
+        },
+        "measured": {
+          "width": 140,
+          "height": 123
+        },
+        "data": {
+          "class": "data",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__webhook_1source-tags-0-parse_1target-tags-0",
+            "source": "webhook_1",
+            "target": "parse_1",
+            "sourceHandle": "source-tags-0",
+            "targetHandle": "target-tags-0"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "tags",
+          "from": "webhook_1"
+        }
+      ]
+    },
+    {
+      "id": "response_1",
+      "provider": "response",
+      "config": {
+        "lanes": []
+      },
+      "ui": {
+        "position": {
+          "x": 440,
+          "y": 200
+        },
+        "measured": {
+          "width": 140,
+          "height": 264
+        },
+        "data": {
+          "class": "infrastructure",
+          "type": "default"
+        },
+        "formDataValid": true,
+        "edges": [
+          {
+            "selectable": true,
+            "deletable": true,
+            "id": "xy-edge__parse_1source-text-0-response_1target-text-6",
+            "source": "parse_1",
+            "target": "response_1",
+            "sourceHandle": "source-text-0",
+            "targetHandle": "target-text-6"
+          }
+        ]
+      },
+      "input": [
+        {
+          "lane": "text",
+          "from": "parse_1"
+        }
+      ]
+    }
+  ],
+  "id": "950833ec-ba67-428d-a37f-aab699447ca2"
+}
